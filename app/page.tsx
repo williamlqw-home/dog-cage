@@ -7,7 +7,7 @@ export default function Home() {
 
   async function loadStatus() {
     try {
-      const res = await fetch('/api/door');
+      const res = await fetch("/api/door", {cache: "no-store",});
       const data = await res.json();
 
       setStatus(data.status);
