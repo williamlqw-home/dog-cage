@@ -1,28 +1,34 @@
-export const dynamic = "force-dynamic";
+import { sql } from "@/lib/db";
 
-let latestDoorStatus = {
-  status: "unknown",
-  updatedAt: null as string | null,
-};
+export const dynamic = "force-dynamic";
 
 export async function POST(req: Request) {
   const body = await req.json();
 
-  latestDoorStatus = {
-    status: body.status,
-    updatedAt: new Date().toISOString(),
-  };
+  await sql`
+    INSERT INTO door_events(status)
+    VALUES (${body.status})
+  `;
 
   return Response.json({
     success: true,
-    data: latestDoorStatus,
   });
 }
 
 export async function GET() {
-  return Response.json(latestDoorStatus, {
-    headers: {
-      "Cache-Control": "no-store",
-    },
-  });
+
+  const rows = await sql`
+    SELECT status, created_at
+    FROM door_events
+    ORDER BY id DESC
+    LIMIT 1
+  `;
+
+  if (rows.length === 0) {
+    return Response.json({
+      status: "unknown",
+    });
+  }
+
+  return Response.json(rows[0]);
 }
