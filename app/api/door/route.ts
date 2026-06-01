@@ -23,25 +23,29 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
-  await sql`
-    CREATE TABLE IF NOT EXISTS cage_events (
-      id SERIAL PRIMARY KEY,
-      cage1 TEXT NOT NULL,
-      cage2 TEXT NOT NULL,
-      created_at TIMESTAMPTZ DEFAULT NOW()
-    )
-  `;
+  try {
+    await sql`
+      CREATE TABLE IF NOT EXISTS cage_events (
+        id SERIAL PRIMARY KEY,
+        cage1 TEXT NOT NULL,
+        cage2 TEXT NOT NULL,
+        created_at TIMESTAMPTZ DEFAULT NOW()
+      )
+    `;
 
-  const rows = await sql`
-    SELECT cage1, cage2, created_at
-    FROM cage_events
-    ORDER BY id DESC
-    LIMIT 1
-  `;
+    const rows = await sql`
+      SELECT cage1, cage2, created_at
+      FROM cage_events
+      ORDER BY id DESC
+      LIMIT 1
+    `;
 
-  if (rows.length === 0) {
-    return Response.json({ cage1: "unknown", cage2: "unknown" });
+    if (rows.length === 0) {
+      return Response.json({ cage1: "unknown", cage2: "unknown" });
+    }
+
+    return Response.json(rows[0]);
+  } catch (err) {
+    return Response.json({ error: String(err) }, { status: 500 });
   }
-
-  return Response.json(rows[0]);
 }
