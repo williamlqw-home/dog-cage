@@ -54,7 +54,7 @@ export default function Home() {
       <div style={{
         width: '600px',
         height: '420px',
-        backgroundImage: isUnknown ? 'none' : "url('/cage-states.jpg')",
+        backgroundImage: isUnknown ? 'none' : "url('/cage-states.png')",
         backgroundSize: '200% 200%',
         backgroundPosition: bgPosition,
         backgroundColor: isUnknown ? '#222' : undefined,
