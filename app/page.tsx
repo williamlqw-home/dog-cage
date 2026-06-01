@@ -26,13 +26,15 @@ export default function Home() {
   return (
     <main
       style={{
-        height: '100vh',
+        width: '100%',
+        flex: 1,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
         gap: '40px',
         backgroundColor: '#111',
+        minHeight: '100vh',
       }}
     >
       <CageStatus label="Cage 1" status={cage1} />
